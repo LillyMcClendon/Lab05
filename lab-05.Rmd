@@ -277,7 +277,8 @@ dn_lq_tx <- dn_lq_tx %>%
 ```{r min-dist-from-each-dennys-laquinta-tx }
 dn_lq_tx_mindist <- dn_lq_tx %>%
   group_by(address.x) %>%
-  summarize(closest = min(distance))
+  summarize(closest = min(distance)) 
+dn_lq_tx_mindist[order(dn_lq_tx_mindist$closest, decreasing= TRUE),]
 ```
 
 ``` {r descriptive-stats-tx}
@@ -297,7 +298,7 @@ print(quart3_tx + (IQR_tx*1.5))
 
 #### Description of the distribution of the distances between a Denny's and La Quinta for each Denny's location. 
 
-The IQR method for identifying outliers has determined that none of the ___ minimum distances between a Denny's and La Quinta are outliers in Texas. The distances range from 0.0160 to 60.5820 with the average distance equaling 5.7918 and a median of 3.3715.  
+The IQR method for identifying outliers has determined that 14 of the 200 minimum distances between a Denny's and La Quinta are outliers in Texas. The distances range from 0.0160 to 60.5820 with the average distance equaling 5.7918 and a median of 3.3715.  
 
 ```{r barplot-visualization-texas}
 ggplot(dn_lq_tx_mindist, aes(x = forcats::fct_reorder(address.x, desc(closest)), y = closest)) + 
@@ -310,3 +311,76 @@ ggplot(dn_lq_tx_mindist, aes(x = forcats::fct_reorder(address.x, desc(closest)),
 coord_flip()
 ```
 
+### Exercise 11 
+
+```{r filter-dennys-newjersey}
+dn_nj <- dennys %>%
+  filter(state == "NJ")
+nrow(dn_nj)
+view(dn_nj)
+```
+
+```{r filter-laquinta-nj}
+lq_nj <- laquinta %>%
+  filter(state == "NJ")
+nrow(lq_nj)
+view(lq_nj)
+```
+
+```{r filter-dennys-laquinta-newjersey-combinations}
+total_combinations_nj <- nrow(dn_nj) * nrow(lq_nj)
+print(total_combinations_nj)
+```
+
+```{r join-dennys-nj-laquinta-nj}
+dn_lq_nj <- full_join(dn_nj, lq_nj, 
+                      by = "state")
+dn_lq_nj
+```
+
+```{r observations-variablenames-joined-dn_lq_nj}
+library(dplyr)
+count(dn_lq_nj)
+colnames(dn_lq_nj)
+```
+
+```{r add_distance_to_dn_lq_nj}
+dn_lq_nj <- dn_lq_nj %>%
+  mutate(distance = haversine(longitude.x, latitude.x, longitude.y, latitude.y, round = 3))
+```
+
+```{r min-dist-from-each-dennys-laquinta_nj}
+dn_lq_nj_mindist <- dn_lq_nj %>%
+  group_by(address.x) %>%
+  summarize(closest = min(distance))
+```
+
+``` {r descriptive-stats}
+summary(dn_lq_nj_mindist)
+IQR(dn_lq_nj_mindist$closest)
+table <- table(dn_lq_nj_mindist)
+```
+
+```{r outliers}
+
+IQR_nj <- 23.524
+quart1_nj <- 30.88 
+quart3_nj <- 54.40
+print(quart1_nj - (IQR_nj*1.5))
+print(quart3_nj + (IQR_nj*1.5))
+```
+
+#### Description of the distribution of the distances between a Denny's and La Quinta for each Denny's location in New Jersey 
+
+The IQR method for identifying outliers has determined that none of the 10 minimum distances between a Denny's and La Quinta are outliers. The distances range from 15.39 to 69.13, with the average distance equaling 42.29 and a median of 41.52.  
+
+```{r barplot-visualization-nj}
+ggplot(dn_lq_nj_mindist, aes(x = forcats::fct_reorder(address.x, desc(closest)), y = closest)) + 
+  geom_col() + 
+  labs(
+    title = "Distance between Denny's and La Quinta Locations in New Jersey",
+    x = "Denny's Address",
+    y = "Distance (km)"
+  ) +
+coord_flip()
+```
