@@ -147,18 +147,4 @@ ggplot(dn_lq_ak_mindist, aes(x = forcats::fct_reorder(address.x, desc(closest)),
   )
 ```
 
-```{r Alaska-point-and-distance-plot}
-library(ggplot2)
-dn_lq_ak <- dn_lq_ak %>% 
-  mutate(id = row_number())
-ggplot(dn_lq_ak) +
-  geom_point(aes(x = longitude.x, y = latitude.x), color = "red") +
-  geom_point(aes(x = longitude.y, y = latitude.y), color = "green") +
-  geom_segment(aes(x = longitude.x, y = latitude.x, xend = longitude.y, yend = latitude.y, color = factor(id))) +
-  scale_color_discrete(name = "Row ID") + 
-  labs(
-    title = "Distance between Denny's and La Quinta Locations in Alaska",
-    x = "Longitude",
-    y = "Latitude"
-  )
-```
+
