@@ -127,13 +127,13 @@ barplot(table)
 ```{r outliers}
 
 IQR_ak <- 1.982 
-Minimum_ak <- 3.616 
-Maximum_ak <- 5.598 
-print(Minimum_ak - (IQR_ak*1.5))
-print(Maximum_ak + (IQR_ak*1.5))
+quart1_ak <- 3.616 
+quart3_ak <- 5.598 
+print(quart1_ak - (IQR_ak*1.5))
+print(quart3_ak + (IQR_ak*1.5))
 ```
 
-#### Description of the distribution of the distances between a Denny's and La Quinta for each Denny's location. 
+#### Description of the distribution of the distances between a Denny's and La Quinta for each Denny's location in Alaska. 
 
 The distribution of distances between a Denny's and La Quinta. The IQR method for identifying outliers has determined that none of the three minimum distances between a Denny's and La Quinta are outliers. The distances range from 2.035 to 5. 998, with the average distance equaling 4.410 and a median of 5.197.  
 
@@ -147,4 +147,77 @@ ggplot(dn_lq_ak_mindist, aes(x = forcats::fct_reorder(address.x, desc(closest)),
   )
 ```
 
+### Exercise 9
+
+```{r filter-dennys-north-carolina}
+dn_nc <- dennys %>%
+  filter(state == "NC")
+nrow(dn_nc)
+view(dn_nc)
+```
+
+```{r filter-laquinta-north-carolina}
+lq_nc <- laquinta %>%
+  filter(state == "NC")
+nrow(lq_nc)
+view(lq_nc)
+```
+
+```{r filter-dennys-laquinta-north-carolina-combinations}
+total_combinations_nc <- nrow(dn_nc) * nrow(lq_nc)
+print(total_combinations_nc)
+```
+
+```{r join-dennys-nc-laquinta-nc}
+dn_lq_nc <- full_join(dn_nc, lq_nc, 
+                      by = "state")
+dn_lq_nc
+```
+
+```{r observations-variablenames-joined-dn_lq_nc}
+library(dplyr)
+count(dn_lq_nc)
+colnames(dn_lq_nc)
+```
+
+```{r add_distance_to_dn_lq_nc}
+dn_lq_nc <- dn_lq_nc %>%
+  mutate(distance = haversine(longitude.x, latitude.x, longitude.y, latitude.y, round = 3))
+```
+
+```{r min-dist-from-each-dennys-laquinta-nc }
+dn_lq_nc_mindist <- dn_lq_nc %>%
+  group_by(address.x) %>%
+  summarize(closest = min(distance))
+```
+
+``` {r descriptive-stats-nc}
+summary(dn_lq_nc_mindist)
+IQR(dn_lq_nc_mindist$closest)
+table <- table(dn_lq_nc_mindist)
+```
+
+```{r outliers-nc}
+
+IQR_nc <- 71.597 
+quart1_nc <- 22.388
+quart3_nc <- 93.985
+print(quart1_nc - (IQR_nc*1.5))
+print(quart3_nc + (IQR_nc*1.5))
+```
+
+#### Description of the distribution of the distances between a Denny's and La Quinta for each Denny's location in North Carolina. 
+
+The IQR method for identifying outliers has determined that none of the 28 minimum distances between a Denny's and La Quinta are outliers in North Carolina. The distances range from 1.779 to 187.935, with the average distance equaling 65.444 and a median of 53.456.  
+
+```{r barplot-visualization-nc}
+ggplot(dn_lq_nc_mindist, aes(x = forcats::fct_reorder(address.x, desc(closest)), y = closest)) + 
+  geom_col() + 
+  labs(
+    title = "Distance between Denny's and La Quinta Locations in North Carolina",
+    x = "Denny's Address",
+    y = "Distance (km)"
+  ) + 
+  coord_flip()
+```
 
