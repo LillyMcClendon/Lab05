@@ -106,3 +106,12 @@ dn_lq_ak <- dn_lq_ak %>%
   mutate(distance = haversine(longitude.x, latitude.x, longitude.y, latitude.y, round = 3))
 ```
 
+### Exercise 7 
+
+```{r min-dist-from-each-dennys-laquinta }
+dn_lq_ak_mindist <- dn_lq_ak %>%
+  group_by(address.x) %>%
+  summarize(closest = min(distance))
+```
+
+
