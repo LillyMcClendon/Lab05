@@ -61,7 +61,20 @@ dn_lq_ak
 
 ### Exercise 4
 
-...
+```{r observations-variablenames-joined-dn_lq_ak}
+library(dplyr)
+count(dn_lq_ak)
+colnames(dn_lq_ak)
+```
+
+#### Number of observations in joined dn_lq_ak data frame
+
+There are 6 observations in the joined dn_lq_ak data frame, which matches up with the number of total combinations (6) we calculated. 
+
+#### Names of variables in joined dn_lq_ak data frame
+
+The names of the variables in the joined dn_lq_ak data frame are address.x, 
+city.x, state, zip.x, longitude.x, latitude.x, address.y, city.y, zip.y, longitude.y, and latitude.y. 
 
 ### Exercise 5
 
