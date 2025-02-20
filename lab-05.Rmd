@@ -168,6 +168,8 @@ total_combinations_nc <- nrow(dn_nc) * nrow(lq_nc)
 print(total_combinations_nc)
 ```
 
+There are 336 total combinations of Denny's and La Quinta locations in Texas. 
+
 ```{r join-dennys-nc-laquinta-nc}
 dn_lq_nc <- full_join(dn_nc, lq_nc, 
                       by = "state")
@@ -219,5 +221,92 @@ ggplot(dn_lq_nc_mindist, aes(x = forcats::fct_reorder(address.x, desc(closest)),
     y = "Distance (km)"
   ) + 
   coord_flip()
+```
+
+### Exercise 10 
+
+```{r filter-dennys-texas}
+dn_tx <- dennys %>%
+  filter(state == "TX")
+nrow(dn_tx)
+view(dn_tx)
+```
+
+```{r filter-laquinta-texas}
+lq_tx <- laquinta %>%
+  filter(state == "TX")
+nrow(lq_tx)
+view(lq_tx)
+```
+
+#### Total combinations of Denny's and La Quinta Locations in Texas 
+
+```{r filter-dennys-laquinta-texas-combinations}
+total_combinations_tx <- nrow(dn_tx) * nrow(lq_tx)
+print(total_combinations_tx)
+```
+
+There are 47,400 total combinations of Denny's and La Quinta locations in Texas. 
+
+#### Joining Denny's in Texas and La Quinta in Texas datasets 
+```{r join-dennys-tx-laquinta-tx}
+dn_lq_tx <- full_join(dn_tx, lq_tx, 
+                      by = "state")
+dn_lq_tx
+```
+
+```{r observations-variablenames-joined-dn_lq_tx}
+library(dplyr)
+count(dn_lq_tx)
+colnames(dn_lq_tx)
+```
+#### Number of observations in joined dn_lq_tx data frame
+
+There are 47,400 observations in the joined dn_lq_ak data frame, which matches up with the number of total combinations (47,400) we calculated. 
+
+#### Names of variables in joined dn_lq_tx data frame
+
+The names of the variables in the joined dn_lq_tx data frame are address.x, city.x, state, zip.x, longitude.x, latitude.x, address.y, city.y, zip.y, longitude.y, and latitude.y. 
+
+
+```{r add_distance_to_dn_lq_tx}
+dn_lq_tx <- dn_lq_tx %>%
+  mutate(distance = haversine(longitude.x, latitude.x, longitude.y, latitude.y, round = 3))
+```
+
+```{r min-dist-from-each-dennys-laquinta-tx }
+dn_lq_tx_mindist <- dn_lq_tx %>%
+  group_by(address.x) %>%
+  summarize(closest = min(distance))
+```
+
+``` {r descriptive-stats-tx}
+summary(dn_lq_tx_mindist)
+IQR(dn_lq_tx_mindist$closest)
+table <- table(dn_lq_tx_mindist)
+```
+
+```{r outliers-tx}
+
+IQR_tx <- 5.89975
+quart1_tx <- 0.7305 
+quart3_tx <- 6.6303 
+print(quart1_tx - (IQR_tx*1.5))
+print(quart3_tx + (IQR_tx*1.5))
+```
+
+#### Description of the distribution of the distances between a Denny's and La Quinta for each Denny's location. 
+
+The IQR method for identifying outliers has determined that none of the ___ minimum distances between a Denny's and La Quinta are outliers in Texas. The distances range from 0.0160 to 60.5820 with the average distance equaling 5.7918 and a median of 3.3715.  
+
+```{r barplot-visualization-texas}
+ggplot(dn_lq_tx_mindist, aes(x = forcats::fct_reorder(address.x, desc(closest)), y = closest)) + 
+  geom_col() + 
+  labs(
+    title = "Distance between Denny's and La Quinta Locations in Texas",
+    x = "Denny's Address",
+    y = "Distance (km)"
+  ) +
+coord_flip()
 ```
 
