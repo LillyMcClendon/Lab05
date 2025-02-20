@@ -114,4 +114,51 @@ dn_lq_ak_mindist <- dn_lq_ak %>%
   summarize(closest = min(distance))
 ```
 
+### Exercise 8 
 
+``` {r descriptive-stats}
+summary(dn_lq_ak_mindist)
+IQR(dn_lq_ak_mindist$closest)
+table <- table(dn_lq_ak_mindist)
+print(table)
+barplot(table)
+```
+
+```{r outliers}
+
+IQR_ak <- 1.982 
+Minimum_ak <- 3.616 
+Maximum_ak <- 5.598 
+print(Minimum_ak - (IQR_ak*1.5))
+print(Maximum_ak + (IQR_ak*1.5))
+```
+
+#### Description of the distribution of the distances between a Denny's and La Quinta for each Denny's location. 
+
+The distribution of distances between a Denny's and La Quinta. The IQR method for identifying outliers has determined that none of the three minimum distances between a Denny's and La Quinta are outliers. The distances range from 2.035 to 5. 998, with the average distance equaling 4.410 and a median of 5.197.  
+
+```{r barplot-visualization}
+ggplot(dn_lq_ak_mindist, aes(x = forcats::fct_reorder(address.x, desc(closest)), y = closest)) + 
+  geom_col() + 
+  labs(
+    title = "Distance between Denny's and La Quinta Locations in Alaska",
+    x = "Denny's Address",
+    y = "Distance (km)"
+  )
+```
+
+```{r Alaska-point-and-distance-plot}
+library(ggplot2)
+dn_lq_ak <- dn_lq_ak %>% 
+  mutate(id = row_number())
+ggplot(dn_lq_ak) +
+  geom_point(aes(x = longitude.x, y = latitude.x), color = "red") +
+  geom_point(aes(x = longitude.y, y = latitude.y), color = "green") +
+  geom_segment(aes(x = longitude.x, y = latitude.x, xend = longitude.y, yend = latitude.y, color = factor(id))) +
+  scale_color_discrete(name = "Row ID") + 
+  labs(
+    title = "Distance between Denny's and La Quinta Locations in Alaska",
+    x = "Longitude",
+    y = "Latitude"
+  )
+```
