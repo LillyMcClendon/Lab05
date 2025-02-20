@@ -18,10 +18,24 @@ states <- read_csv("data/states.csv")
 
 ### Exercise 1
 
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+```{r view-dennys-laquinta-data}
+view(dennys)
+view(laquinta)
+```
+
+```{r filter-dennys-alaska}
+dn_ak <- dennys %>%
+  filter(state == "AK")
+nrow(dn_ak)
+view(dn_ak)
+```
+
+```{r filter-laquinta-alaska}
+lq_ak <- laquinta %>%
+  filter(state == "AK")
+nrow(lq_ak)
+view(lq_ak)
+```
 
 ### Exercise 2
 
