@@ -39,10 +39,15 @@ view(lq_ak)
 
 ### Exercise 2
 
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+#### Total combinations of Denny's and La Quinta Locations 
+
+```{r filter-dennys-laquinta-alaska-combinations}
+total_combinations <- nrow(dn_ak) * nrow(lq_ak)
+print(total_combinations)
+```
+
+There are 6 total combinations of Denny's and La Quinta locations in Alaska. 
+
 
 ### Exercise 3
 
