@@ -51,7 +51,13 @@ There are 6 total combinations of Denny's and La Quinta locations in Alaska.
 
 ### Exercise 3
 
-...
+#### Joining Denny's in Alaska and La Quinta in Alaska datasets 
+
+```{r join-dennys-ak-laquinta-ak}
+dn_lq_ak <- full_join(dn_ak, lq_ak, 
+                      by = "state")
+dn_lq_ak
+```
 
 ### Exercise 4
 
