@@ -213,11 +213,10 @@ print(quart3_ak + (IQR_ak*1.5))
 
 #### Description of the distribution of the distances between a Denny’s and La Quinta for each Denny’s location in Alaska.
 
-The distribution of distances between a Denny’s and La Quinta. The IQR
-method for identifying outliers has determined that none of the three
-minimum distances between a Denny’s and La Quinta are outliers. The
-distances range from 2.035 to 5. 998, with the average distance equaling
-4.410 and a median of 5.197.
+The IQR method for identifying outliers has determined that none of the
+three minimum distances between a Denny’s and La Quinta are outliers.
+The distances range from 2.035 to 5. 998, with the average distance
+equaling 4.410 and a median of 5.197.
 
 ``` r
 ggplot(dn_lq_ak_mindist, aes(x = forcats::fct_reorder(address.x, desc(closest)), y = closest)) + 
@@ -723,15 +722,15 @@ coord_flip()
 Among the states that I looked at (Alaska, North Carolina, Texas, and
 New Jersey) Mitch Hedberg’s joke is most likely to hold true is Alaska.
 Among the minimum distances, the greatest distance was approximately
-6km. Whereas in the when North Carolina, Texas and New Jersey were
-examined, the among the minimum distances, the greatest distances were
-187, 60.58, and 69.13 respectively. Although Texas has a smaller median
+6km. Whereas when North Carolina, Texas and New Jersey were examined,
+among the minimum distances, the greatest distances were approximately
+187, 61, and 69 respectively. Although Texas has a smaller median
 distance value (3.37) than Alaska (5.20), I would still assert that
 Alaska is the state where Mitch Hedberg’s joke is most likely to hold
-true. I think this becuase of the maximum distance in Alaska of
+true. I think this because of the maximum distance in Alaska of
 approximately 6 kilometers. In the right conditions, a person can see
 roughly 5 kilometers. Therefore, in Alaska, a person would be able to
 literally see a la quinta from every Denny’s location which would make
-the joke seem the most plausible. In texas, there is a much larger range
+the joke seem the most plausible. In Texas, there is a much larger range
 of values so there would be many occasions where there is a Denny’s
-without a la quinta close nearby.
+without a La Quinta close nearby.
