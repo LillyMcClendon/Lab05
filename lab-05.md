@@ -223,7 +223,7 @@ distances range from 2.035 to 5. 998, with the average distance equaling
 ggplot(dn_lq_ak_mindist, aes(x = forcats::fct_reorder(address.x, desc(closest)), y = closest)) + 
   geom_col() + 
   labs(
-    title = "Distance between Denny's and La Quinta Locations in Alaska",
+    title = "Distance between Denny's and La Quinta Locations in AK",
     x = "Denny's Address",
     y = "Distance (km)"
   )
@@ -375,7 +375,7 @@ average distance equaling 65.444 and a median of 53.456.
 ggplot(dn_lq_nc_mindist, aes(x = forcats::fct_reorder(address.x, desc(closest)), y = closest)) + 
   geom_col() + 
   labs(
-    title = "Distance between Denny's and La Quinta Locations in North Carolina",
+    title = "Distance between Denny's and La Quinta Locations in NC",
     x = "Denny's Address",
     y = "Distance (km)"
   ) + 
@@ -559,7 +559,7 @@ distance equaling 5.7918 and a median of 3.3715.
 ggplot(dn_lq_tx_mindist, aes(x = forcats::fct_reorder(address.x, desc(closest)), y = closest)) + 
   geom_col() + 
   labs(
-    title = "Distance between Denny's and La Quinta Locations in Texas",
+    title = "Distance between Denny's and La Quinta Locations in TX",
     x = "Denny's Address",
     y = "Distance (km)"
   ) +
@@ -709,7 +709,7 @@ distances range from 15.39 to 69.13, with the average distance equaling
 ggplot(dn_lq_nj_mindist, aes(x = forcats::fct_reorder(address.x, desc(closest)), y = closest)) + 
   geom_col() + 
   labs(
-    title = "Distance between Denny's and La Quinta Locations in New Jersey",
+    title = "Distance between Denny's and La Quinta Locations in NJ",
     x = "Denny's Address",
     y = "Distance (km)"
   ) +
@@ -721,4 +721,17 @@ coord_flip()
 ### Exercise 12
 
 Among the states that I looked at (Alaska, North Carolina, Texas, and
-New Jersey) Mitch Hedberg’s joke is most likely to hold true
+New Jersey) Mitch Hedberg’s joke is most likely to hold true is Alaska.
+Among the minimum distances, the greatest distance was approximately
+6km. Whereas in the when North Carolina, Texas and New Jersey were
+examined, the among the minimum distances, the greatest distances were
+187, 60.58, and 69.13 respectively. Although Texas has a smaller median
+distance value (3.37) than Alaska (5.20), I would still assert that
+Alaska is the state where Mitch Hedberg’s joke is most likely to hold
+true. I think this becuase of the maximum distance in Alaska of
+approximately 6 kilometers. In the right conditions, a person can see
+roughly 5 kilometers. Therefore, in Alaska, a person would be able to
+literally see a la quinta from every Denny’s location which would make
+the joke seem the most plausible. In texas, there is a much larger range
+of values so there would be many occasions where there is a Denny’s
+without a la quinta close nearby.
