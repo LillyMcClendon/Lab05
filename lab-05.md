@@ -264,6 +264,9 @@ print(total_combinations_nc)
 
     ## [1] 336
 
+There are 336 total combinations of Denny’s and La Quinta locations in
+Texas.
+
 ``` r
 dn_lq_nc <- full_join(dn_nc, lq_nc, 
                       by = "state")
@@ -380,3 +383,342 @@ ggplot(dn_lq_nc_mindist, aes(x = forcats::fct_reorder(address.x, desc(closest)),
 ```
 
 ![](lab-05_files/figure-gfm/barplot-visualization-nc-1.png)<!-- -->
+
+### Exercise 10
+
+``` r
+dn_tx <- dennys %>%
+  filter(state == "TX")
+nrow(dn_tx)
+```
+
+    ## [1] 200
+
+``` r
+view(dn_tx)
+```
+
+``` r
+lq_tx <- laquinta %>%
+  filter(state == "TX")
+nrow(lq_tx)
+```
+
+    ## [1] 237
+
+``` r
+view(lq_tx)
+```
+
+#### Total combinations of Denny’s and La Quinta Locations in Texas
+
+``` r
+total_combinations_tx <- nrow(dn_tx) * nrow(lq_tx)
+print(total_combinations_tx)
+```
+
+    ## [1] 47400
+
+There are 47,400 total combinations of Denny’s and La Quinta locations
+in Texas.
+
+#### Joining Denny’s in Texas and La Quinta in Texas datasets
+
+``` r
+dn_lq_tx <- full_join(dn_tx, lq_tx, 
+                      by = "state")
+```
+
+    ## Warning in full_join(dn_tx, lq_tx, by = "state"): Detected an unexpected many-to-many relationship between `x` and `y`.
+    ## ℹ Row 1 of `x` matches multiple rows in `y`.
+    ## ℹ Row 1 of `y` matches multiple rows in `x`.
+    ## ℹ If a many-to-many relationship is expected, set `relationship =
+    ##   "many-to-many"` to silence this warning.
+
+``` r
+dn_lq_tx
+```
+
+    ## # A tibble: 47,400 × 11
+    ##    address.x    city.x state zip.x longitude.x latitude.x address.y city.y zip.y
+    ##    <chr>        <chr>  <chr> <chr>       <dbl>      <dbl> <chr>     <chr>  <chr>
+    ##  1 120 East I-… Abile… TX    79601       -99.6       32.4 3018 Cat… "\nAb… 79606
+    ##  2 120 East I-… Abile… TX    79601       -99.6       32.4 3501 Wes… "\nAb… 79601
+    ##  3 120 East I-… Abile… TX    79601       -99.6       32.4 14925 La… "\nAd… 75254
+    ##  4 120 East I-… Abile… TX    79601       -99.6       32.4 909 East… "\nAl… 78516
+    ##  5 120 East I-… Abile… TX    79601       -99.6       32.4 2400 Eas… "\nAl… 78332
+    ##  6 120 East I-… Abile… TX    79601       -99.6       32.4 1220 Nor… "\nAl… 75013
+    ##  7 120 East I-… Abile… TX    79601       -99.6       32.4 1165 Hwy… "\nAl… 76009
+    ##  8 120 East I-… Abile… TX    79601       -99.6       32.4 880 Sout… "\nAl… 77511
+    ##  9 120 East I-… Abile… TX    79601       -99.6       32.4 1708 Int… "\nAm… 79103
+    ## 10 120 East I-… Abile… TX    79601       -99.6       32.4 9305 Eas… "\nAm… 79118
+    ## # ℹ 47,390 more rows
+    ## # ℹ 2 more variables: longitude.y <dbl>, latitude.y <dbl>
+
+``` r
+library(dplyr)
+count(dn_lq_tx)
+```
+
+    ## # A tibble: 1 × 1
+    ##       n
+    ##   <int>
+    ## 1 47400
+
+``` r
+colnames(dn_lq_tx)
+```
+
+    ##  [1] "address.x"   "city.x"      "state"       "zip.x"       "longitude.x"
+    ##  [6] "latitude.x"  "address.y"   "city.y"      "zip.y"       "longitude.y"
+    ## [11] "latitude.y"
+
+#### Number of observations in joined dn_lq_tx data frame
+
+There are 47,400 observations in the joined dn_lq_ak data frame, which
+matches up with the number of total combinations (47,400) we calculated.
+
+#### Names of variables in joined dn_lq_tx data frame
+
+The names of the variables in the joined dn_lq_tx data frame are
+address.x, city.x, state, zip.x, longitude.x, latitude.x, address.y,
+city.y, zip.y, longitude.y, and latitude.y.
+
+``` r
+dn_lq_tx <- dn_lq_tx %>%
+  mutate(distance = haversine(longitude.x, latitude.x, longitude.y, latitude.y, round = 3))
+```
+
+``` r
+dn_lq_tx_mindist <- dn_lq_tx %>%
+  group_by(address.x) %>%
+  summarize(closest = min(distance)) 
+dn_lq_tx_mindist[order(dn_lq_tx_mindist$closest, decreasing= TRUE),]
+```
+
+    ## # A tibble: 200 × 2
+    ##    address.x             closest
+    ##    <chr>                   <dbl>
+    ##  1 I-30 & Highway 82        60.6
+    ##  2 4756 E Hwy 83            51.8
+    ##  3 1058 Us 59 S             43.4
+    ##  4 2615 N Stallings Dr N    38.9
+    ##  5 10367 Highway 59         37.6
+    ##  6 17400 N Hwy 20           35.9
+    ##  7 100 Us Highway 79 S      33.9
+    ##  8 100 Cottonwood           33.6
+    ##  9 11710 Ih 35              24.4
+    ## 10 1201 Hwy 146 N           19.9
+    ## # ℹ 190 more rows
+
+``` r
+summary(dn_lq_tx_mindist)
+```
+
+    ##   address.x            closest       
+    ##  Length:200         Min.   : 0.0160  
+    ##  Class :character   1st Qu.: 0.7305  
+    ##  Mode  :character   Median : 3.3715  
+    ##                     Mean   : 5.7918  
+    ##                     3rd Qu.: 6.6303  
+    ##                     Max.   :60.5820
+
+``` r
+IQR(dn_lq_tx_mindist$closest)
+```
+
+    ## [1] 5.89975
+
+``` r
+table <- table(dn_lq_tx_mindist)
+```
+
+``` r
+IQR_tx <- 5.89975
+quart1_tx <- 0.7305 
+quart3_tx <- 6.6303 
+print(quart1_tx - (IQR_tx*1.5))
+```
+
+    ## [1] -8.119125
+
+``` r
+print(quart3_tx + (IQR_tx*1.5))
+```
+
+    ## [1] 15.47992
+
+#### Description of the distribution of the distances between a Denny’s and La Quinta for each Denny’s location.
+
+The IQR method for identifying outliers has determined that 14 of the
+200 minimum distances between a Denny’s and La Quinta are outliers in
+Texas. The distances range from 0.0160 to 60.5820 with the average
+distance equaling 5.7918 and a median of 3.3715.
+
+``` r
+ggplot(dn_lq_tx_mindist, aes(x = forcats::fct_reorder(address.x, desc(closest)), y = closest)) + 
+  geom_col() + 
+  labs(
+    title = "Distance between Denny's and La Quinta Locations in Texas",
+    x = "Denny's Address",
+    y = "Distance (km)"
+  ) +
+coord_flip()
+```
+
+![](lab-05_files/figure-gfm/barplot-visualization-texas-1.png)<!-- -->
+
+### Exercise 11
+
+``` r
+dn_nj <- dennys %>%
+  filter(state == "NJ")
+nrow(dn_nj)
+```
+
+    ## [1] 10
+
+``` r
+view(dn_nj)
+```
+
+``` r
+lq_nj <- laquinta %>%
+  filter(state == "NJ")
+nrow(lq_nj)
+```
+
+    ## [1] 5
+
+``` r
+view(lq_nj)
+```
+
+``` r
+total_combinations_nj <- nrow(dn_nj) * nrow(lq_nj)
+print(total_combinations_nj)
+```
+
+    ## [1] 50
+
+``` r
+dn_lq_nj <- full_join(dn_nj, lq_nj, 
+                      by = "state")
+```
+
+    ## Warning in full_join(dn_nj, lq_nj, by = "state"): Detected an unexpected many-to-many relationship between `x` and `y`.
+    ## ℹ Row 1 of `x` matches multiple rows in `y`.
+    ## ℹ Row 1 of `y` matches multiple rows in `x`.
+    ## ℹ If a many-to-many relationship is expected, set `relationship =
+    ##   "many-to-many"` to silence this warning.
+
+``` r
+dn_lq_nj
+```
+
+    ## # A tibble: 50 × 11
+    ##    address.x    city.x state zip.x longitude.x latitude.x address.y city.y zip.y
+    ##    <chr>        <chr>  <chr> <chr>       <dbl>      <dbl> <chr>     <chr>  <chr>
+    ##  1 1286 St Geo… Avenel NJ    07001       -74.3       40.6 265 Rte … "\nCl… 07014
+    ##  2 1286 St Geo… Avenel NJ    07001       -74.3       40.6 38 Two B… "\nFa… 07004
+    ##  3 1286 St Geo… Avenel NJ    07001       -74.3       40.6 5000 Clo… "\nMo… 08054
+    ##  4 1286 St Geo… Avenel NJ    07001       -74.3       40.6 350 Ligh… "\nSe… 07094
+    ##  5 1286 St Geo… Avenel NJ    07001       -74.3       40.6 109 Rout… "\nWe… 07764
+    ##  6 221 Us Hwy … Borde… NJ    08505       -74.7       40.1 265 Rte … "\nCl… 07014
+    ##  7 221 Us Hwy … Borde… NJ    08505       -74.7       40.1 38 Two B… "\nFa… 07004
+    ##  8 221 Us Hwy … Borde… NJ    08505       -74.7       40.1 5000 Clo… "\nMo… 08054
+    ##  9 221 Us Hwy … Borde… NJ    08505       -74.7       40.1 350 Ligh… "\nSe… 07094
+    ## 10 221 Us Hwy … Borde… NJ    08505       -74.7       40.1 109 Rout… "\nWe… 07764
+    ## # ℹ 40 more rows
+    ## # ℹ 2 more variables: longitude.y <dbl>, latitude.y <dbl>
+
+``` r
+library(dplyr)
+count(dn_lq_nj)
+```
+
+    ## # A tibble: 1 × 1
+    ##       n
+    ##   <int>
+    ## 1    50
+
+``` r
+colnames(dn_lq_nj)
+```
+
+    ##  [1] "address.x"   "city.x"      "state"       "zip.x"       "longitude.x"
+    ##  [6] "latitude.x"  "address.y"   "city.y"      "zip.y"       "longitude.y"
+    ## [11] "latitude.y"
+
+``` r
+dn_lq_nj <- dn_lq_nj %>%
+  mutate(distance = haversine(longitude.x, latitude.x, longitude.y, latitude.y, round = 3))
+```
+
+``` r
+dn_lq_nj_mindist <- dn_lq_nj %>%
+  group_by(address.x) %>%
+  summarize(closest = min(distance))
+```
+
+``` r
+summary(dn_lq_nj_mindist)
+```
+
+    ##   address.x            closest     
+    ##  Length:10          Min.   :15.39  
+    ##  Class :character   1st Qu.:30.88  
+    ##  Mode  :character   Median :41.52  
+    ##                     Mean   :42.29  
+    ##                     3rd Qu.:54.40  
+    ##                     Max.   :69.13
+
+``` r
+IQR(dn_lq_nj_mindist$closest)
+```
+
+    ## [1] 23.524
+
+``` r
+table <- table(dn_lq_nj_mindist)
+```
+
+``` r
+IQR_nj <- 23.524
+quart1_nj <- 30.88 
+quart3_nj <- 54.40
+print(quart1_nj - (IQR_nj*1.5))
+```
+
+    ## [1] -4.406
+
+``` r
+print(quart3_nj + (IQR_nj*1.5))
+```
+
+    ## [1] 89.686
+
+#### Description of the distribution of the distances between a Denny’s and La Quinta for each Denny’s location in New Jersey
+
+The IQR method for identifying outliers has determined that none of the
+10 minimum distances between a Denny’s and La Quinta are outliers. The
+distances range from 15.39 to 69.13, with the average distance equaling
+42.29 and a median of 41.52.
+
+``` r
+ggplot(dn_lq_nj_mindist, aes(x = forcats::fct_reorder(address.x, desc(closest)), y = closest)) + 
+  geom_col() + 
+  labs(
+    title = "Distance between Denny's and La Quinta Locations in New Jersey",
+    x = "Denny's Address",
+    y = "Distance (km)"
+  ) +
+coord_flip()
+```
+
+![](lab-05_files/figure-gfm/barplot-visualization-nj-1.png)<!-- -->
+
+### Exercise 12
+
+Among the states that I looked at (Alaska, North Carolina, Texas, and
+New Jersey) Mitch Hedberg’s joke is most likely to hold true
